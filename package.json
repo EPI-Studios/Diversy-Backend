@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "hono": "^4.11.7",
+    "mailtrap": "^4.4.0",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.6"
+  }
+}
