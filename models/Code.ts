@@ -37,4 +37,4 @@ Code.init(
   {
     sequelize,
   },
-); // No password because it's email code verification only
+);
