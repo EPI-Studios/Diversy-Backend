@@ -1,4 +1,4 @@
-import { INTEGER, Model, STRING } from "sequelize";
+import { BOOLEAN, INTEGER, Model, STRING } from "sequelize";
 import sequelize from "../utils/db";
 import createToken from "../utils/token";
 
@@ -51,6 +51,10 @@ User.init(
       type: INTEGER,
       allowNull: false,
       defaultValue: () => Date.now(),
+    },
+    admin: {
+      type: BOOLEAN,
+      defaultValue: false,
     },
   },
   {

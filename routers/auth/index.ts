@@ -1,16 +1,7 @@
 import { Hono } from "hono";
 import User from "../../models/User";
 import Code from "../../models/Code";
-import { MailtrapClient } from "mailtrap";
-
-let mailtrap = new MailtrapClient({
-  token: process.env.MAILTRAP_TOKEN!,
-});
-
-const sender = {
-  email: "auth@diversy.co",
-  name: "Diversy Auth",
-};
+import sendEmail from "../../utils/emails/sendEmail";
 
 const auth = new Hono();
 
@@ -43,12 +34,11 @@ auth.post("/", async (c) => {
   code.save();
   let codeStr = code.get("code") as string;
 
-  await mailtrap.send({
-    from: sender,
-    to: [{ email }],
-    subject: "Your Diversy Verification Code",
-    text: `Your verification code is: ${codeStr}`,
-  });
+  await sendEmail(
+    email,
+    "Your Diversy Verification Code",
+    `Your verification code is: ${codeStr}`,
+  );
 
   return c.json({ message: "Verification code sent" });
 });
