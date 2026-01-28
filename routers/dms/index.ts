@@ -17,9 +17,9 @@ dms.get("/", async (c) => {
   const user = c.get("user");
   const messages = await PrivateMessage.findAll({
     where: {
-      receiverId: user.get("id"),
+      receiver_id: user.get("id"),
     },
-    order: [["createdAt", "DESC"]],
+    order: [["created_at", "DESC"]],
   });
 
   return c.json(messages);
@@ -36,10 +36,10 @@ dms.get("/:otherUserId", async (c) => {
 
   const messages = await PrivateMessage.findAll({
     where: {
-      senderId: otherUser.get("id"),
-      receiverId: user.get("id"),
+      sender_id: otherUser.get("id"),
+      receiver_id: user.get("id"),
     },
-    order: [["createdAt", "ASC"]],
+    order: [["created_at", "ASC"]],
   });
 
   return c.json(messages);
@@ -55,12 +55,12 @@ dms.put("/:messageId", async (c) => {
     return c.json({ error: "Message not found" }, 404);
   }
 
-  if (message.get("senderId") !== user.get("id")) {
+  if (message.get("sender_id") !== user.get("id")) {
     return c.json({ error: "Forbidden" }, 403);
   }
 
   message.set("content", content);
-  message.set("updatedAt", Date.now());
+  message.set("updated_at", Date.now());
   await message.save();
 
   return c.json(message);
@@ -77,8 +77,8 @@ dms.post("/:receiverId", async (c) => {
   }
 
   const message = await PrivateMessage.create({
-    senderId: user.get("id"),
-    receiverId: receiver.get("id"),
+    sender_id: user.get("id"),
+    receiver_id: receiver.get("id"),
     content,
   });
 

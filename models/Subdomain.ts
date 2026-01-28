@@ -11,7 +11,7 @@ Subdomain.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    initiatorId: {
+    initiator_id: {
       type: INTEGER,
       allowNull: false,
       references: { model: User, key: "id" },
@@ -26,12 +26,12 @@ Subdomain.init(
       allowNull: false,
       defaultValue: false,
     },
-    validatedAt: {
+    validated_at: {
       type: INTEGER,
       allowNull: true,
       defaultValue: null,
     },
-    createdAt: {
+    created_at: {
       type: INTEGER,
       allowNull: false,
       defaultValue: () => Date.now(),

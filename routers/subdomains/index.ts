@@ -19,9 +19,8 @@ subdomains.post("/request", authentificated, async (c) => {
 
   const subdomain = await Subdomain.create({
     name,
-    initiatorId: user.get("id"),
+    initiator_id: user.get("id"),
     validated: false,
-    requestedAt: Date.now(),
   });
 
   return c.json({ message: "Subdomain request submitted", subdomain });
@@ -40,9 +39,9 @@ subdomains.post("/validate/:id", admin_auth, async (c) => {
     return c.json({ error: "Subdomain not found" }, 404);
   }
   subdomain.set("validated", true);
-  subdomain.set("validatedAt", Date.now());
+  subdomain.set("validated_at", Date.now());
 
-  const initiatorId = subdomain.get("initiatorId") as number;
+  const initiatorId = subdomain.get("initiator_id") as number;
   const user = await User.findByPk(initiatorId);
 
   if (!user) {
@@ -79,7 +78,7 @@ subdomains.post("/reject/:id", admin_auth, async (c) => {
     return c.json({ error: "Subdomain not found" }, 404);
   }
 
-  const initiatorId = subdomain.get("initiatorId") as number;
+  const initiatorId = subdomain.get("initiator_id") as number;
   const user = await User.findByPk(initiatorId);
 
   if (!user) {

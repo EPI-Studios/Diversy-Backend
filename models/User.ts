@@ -42,12 +42,12 @@ User.init(
       type: STRING,
       allowNull: true,
     },
-    createdAt: {
+    created_at: {
       type: INTEGER,
       allowNull: false,
       defaultValue: () => Date.now(),
     },
-    updatedAt: {
+    updated_at: {
       type: INTEGER,
       allowNull: false,
       defaultValue: () => Date.now(),

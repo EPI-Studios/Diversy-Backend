@@ -1,32 +1,49 @@
 import { INTEGER, Model, STRING } from "sequelize";
 import sequelize from "../utils/db";
-import createCode from "../utils/code";
 
-export default class Code extends Model {}
+export default class Community extends Model {
+  public id!: number;
+  public name!: string;
+  public description!: string | null;
+  public owner_id!: number;
+  public created_at!: number;
+  public icon_url!: string | null;
+  public updated_at!: number;
+  public banner_url!: string | null;
+}
 
-Code.init(
+Community.init(
   {
     id: {
       type: INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    email: {
+    name: {
       type: STRING,
       allowNull: false,
       unique: true,
     },
-    code: {
+    description: {
       type: STRING,
+      allowNull: true,
+    },
+    owner_id: {
+      type: INTEGER,
       allowNull: false,
-      defaultValue: () => {
-        return createCode();
-      },
     },
     created_at: {
       type: INTEGER,
       allowNull: false,
       defaultValue: () => Date.now(),
+    },
+    icon_url: {
+      type: STRING,
+      allowNull: true,
+    },
+    banner_url: {
+      type: STRING,
+      allowNull: true,
     },
     updated_at: {
       type: INTEGER,

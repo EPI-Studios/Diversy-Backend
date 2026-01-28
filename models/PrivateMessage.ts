@@ -11,14 +11,14 @@ PrivateMessage.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    senderId: {
+    sender_id: {
       type: INTEGER,
       references: {
         model: User,
         key: "id",
       },
     },
-    receiverId: {
+    receiver_id: {
       type: INTEGER,
       references: {
         model: User,
@@ -29,12 +29,12 @@ PrivateMessage.init(
       type: STRING,
       allowNull: false,
     },
-    createdAt: {
+    created_at: {
       type: INTEGER,
       allowNull: false,
       defaultValue: () => Date.now(),
     },
-    updatedAt: {
+    updated_at: {
       type: INTEGER,
       allowNull: false,
       defaultValue: () => Date.now(),

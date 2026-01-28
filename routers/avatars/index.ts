@@ -18,6 +18,7 @@ avatars.get("/:userId", async (c) => {
   try {
     const base64url = await getFile(fileKey, "avatar");
     if (!base64url) return c.json({ error: "Avatar not found" }, 404);
+
     return c.body(base64url, 200, {
       "Content-Type": "image/png",
     });
@@ -40,6 +41,9 @@ avatars.post("/", authentificated, async (c) => {
 
   try {
     await uploadAvatar(avatar, (user.get("id") as number).toString());
+
+    user.set("avatar_url", `https://r2.diversy.co/avatars/${user.get("id")}.png`);
+    await user.save();
     return c.json({ message: "Avatar uploaded successfully" });
   } catch (error) {
     return c.json({ error: "Failed to upload avatar" }, 500);
