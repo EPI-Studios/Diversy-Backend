@@ -53,5 +53,6 @@ Community.init(
   },
   {
     sequelize,
+    timestamps: false,
   },
 );

@@ -59,5 +59,6 @@ User.init(
   },
   {
     sequelize,
+    timestamps: false,
   },
 ); // No password because it's email code verification only

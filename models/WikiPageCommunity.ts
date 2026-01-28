@@ -20,7 +20,7 @@ WikiPageCommunity.init(
       defaultValue: "{}",
     },
   },
-  { sequelize },
+  { sequelize, timestamps: false },
 );
 
 WikiPageCommunity.belongsTo(WikiPageCommunity, {

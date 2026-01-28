@@ -35,7 +35,7 @@ ForumPostCommunity.init(
       allowNull: true,
     },
   },
-  { sequelize },
+  { sequelize, timestamps: false },
 );
 
 Community.hasMany(ForumPostCommunity, {

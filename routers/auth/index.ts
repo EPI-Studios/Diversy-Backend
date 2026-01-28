@@ -26,8 +26,8 @@ auth.post("/", async (c) => {
     return c.json({ error: "Invalid request body" }, 400);
   }
 
+  console.log(body);
   let email = body.email;
-
   // Generate a verification code
 
   let code = await Code.create({ email });

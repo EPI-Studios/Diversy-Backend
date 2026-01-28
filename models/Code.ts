@@ -36,5 +36,6 @@ Code.init(
   },
   {
     sequelize,
+    timestamps: false,
   },
 );

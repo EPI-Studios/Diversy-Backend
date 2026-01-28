@@ -3,8 +3,11 @@ import { Hono } from "hono";
 import { LinearRouter } from "hono/router/linear-router";
 import path from "path";
 import sequelize from "./utils/db";
+import { cors } from "hono/cors";
 
 const app = new Hono({ router: new LinearRouter() });
+
+app.use(cors());
 
 app.get("/", (c) => {
   return c.json({ message: "API is running" });

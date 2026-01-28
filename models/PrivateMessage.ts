@@ -42,5 +42,6 @@ PrivateMessage.init(
   },
   {
     sequelize,
+    timestamps: false,
   },
 );

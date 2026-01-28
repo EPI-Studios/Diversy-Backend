@@ -17,7 +17,7 @@ WikiCommunity.init(
       unique: true,
     },
   },
-  { sequelize },
+  { sequelize, timestamps: false },
 );
 
 Community.hasOne(WikiCommunity, {

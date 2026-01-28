@@ -39,5 +39,6 @@ Subdomain.init(
   },
   {
     sequelize,
+    timestamps: false,
   },
 );
