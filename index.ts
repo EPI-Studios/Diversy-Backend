@@ -2,7 +2,6 @@ import { readdirSync } from "fs";
 import { Hono } from "hono";
 import { LinearRouter } from "hono/router/linear-router";
 import path from "path";
-import sequelize from "./utils/db";
 import { cors } from "hono/cors";
 
 const app = new Hono({ router: new LinearRouter() });
@@ -39,7 +38,5 @@ await loadRouters().then((routers) => {
     app.route(`/${prefix}`, router);
   });
 });
-
-sequelize.sync();
 
 export default app;

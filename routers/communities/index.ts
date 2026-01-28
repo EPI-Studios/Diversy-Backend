@@ -1,6 +1,7 @@
 import { Hono } from "hono";
-import Community from "../../models/Community";
-
+import db from "../../utils/db";
+import { communities as cm } from "../../drizzle/schema";
+import { eq } from "drizzle-orm";
 const subrouters = ["chats", "forums", "wikis"] as const;
 
 async function loadSubrouter(name: string) {
@@ -17,7 +18,7 @@ for (const subrouterName of subrouters) {
 }
 
 communities.get("/", async (c) => {
-  const allCommunities = await Community.findAll();
+  const allCommunities = await db.select().from(cm).all();
 
   const parsed = [];
   for (const community of allCommunities) {
@@ -25,8 +26,8 @@ communities.get("/", async (c) => {
       id: community.id,
       name: community.name,
       description: community.description,
-      banner_url: community.banner_url,
-      icon_url: community.icon_url,
+      bannerUrl: community.bannerUrl,
+      iconUrl: community.iconUrl,
     });
   }
 
@@ -36,7 +37,11 @@ communities.get("/", async (c) => {
 communities.get("/:communityId", async (c) => {
   const communityId = c.req.param("communityId");
 
-  let community = await Community.findByPk(communityId);
+  let community = await db
+    .select()
+    .from(cm)
+    .where(eq(cm.id, Number(communityId)))
+    .get();
   if (!community) {
     return c.json({ error: "Community not found" }, 404);
   }

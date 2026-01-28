@@ -1,9 +1,5 @@
-import { Sequelize } from "sequelize";
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/libsql";
+const db = drizzle(process.env.DB_FILE_NAME!);
 
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "./database.sqlite",
-  logging: false,
-});
-
-export default sequelize;
+export default db;

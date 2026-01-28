@@ -1,11 +1,13 @@
 import { Hono } from "hono";
 import { getFile, uploadAvatar } from "../../utils/cloudflare/storage";
 import authentificated from "../../middlewares/authentificated";
-import User from "../../models/User";
+import { users } from "../../drizzle/schema";
+import db from "../../utils/db";
+import { eq } from "drizzle-orm";
 
 type Env = {
   Variables: {
-    user: User;
+    user: typeof users.$inferSelect;
   };
 };
 
@@ -40,10 +42,12 @@ avatars.post("/", authentificated, async (c) => {
   }
 
   try {
-    await uploadAvatar(avatar, (user.get("id") as number).toString());
+    await uploadAvatar(avatar, user.id.toString());
 
-    user.set("avatar_url", `https://r2.diversy.co/avatars/${user.get("id")}.png`);
-    await user.save();
+    db.update(users)
+      .set({ avatarUrl: `https://r2.diversy.co/avatars/${user.id}.png` })
+      .where(eq(users.id, user.id as number));
+
     return c.json({ message: "Avatar uploaded successfully" });
   } catch (error) {
     return c.json({ error: "Failed to upload avatar" }, 500);

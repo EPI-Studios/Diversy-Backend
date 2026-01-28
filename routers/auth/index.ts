@@ -1,7 +1,8 @@
 import { Hono } from "hono";
-import User from "../../models/User";
-import Code from "../../models/Code";
 import sendEmail from "../../utils/emails/sendEmail";
+import db from "../../utils/db";
+import { codes, users } from "../../drizzle/schema";
+import { eq, and } from "drizzle-orm";
 
 const auth = new Hono();
 
@@ -9,13 +10,17 @@ auth.post("/me", async (c) => {
   const Authorization = c.req.header("Authorization") || "";
   const token = Authorization.replace("Bearer ", "");
 
-  const user = await User.findOne({ where: { token } });
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.token, token))
+    .limit(1);
 
-  if (!user) {
+  if (!user.length) {
     return c.json({ error: "Invalid token" }, 401);
   }
 
-  return c.json(user);
+  return c.json(user[0]);
 });
 
 auth.post("/", async (c) => {
@@ -26,18 +31,15 @@ auth.post("/", async (c) => {
     return c.json({ error: "Invalid request body" }, 400);
   }
 
-  console.log(body);
   let email = body.email;
   // Generate a verification code
 
-  let code = await Code.create({ email });
-  code.save();
-  let codeStr = code.get("code") as string;
+  let code = await db.insert(codes).values({ email }).returning().get();
 
   await sendEmail(
     email,
     "Your Diversy Verification Code",
-    `Your verification code is: ${codeStr}`,
+    `Your verification code is: ${code.code}`,
   );
 
   return c.json({ message: "Verification code sent" });
@@ -53,41 +55,46 @@ auth.post("/confirm", async (c) => {
   }
   let { email, code } = body;
 
-  let user = await User.findOne({ where: { email } });
+  let user = await db.select().from(users).where(eq(users.email, email)).get();
 
   // Verify code logic here
 
-  return await Code.findOne({ where: { code, email } }).then(
-    async (foundCode) => {
-      if (!foundCode) {
-        return c.json({ error: "Invalid code" }, 400);
-      }
+  let foundCode = await db
+    .select()
+    .from(codes)
+    .where(and(eq(codes.code, code), eq(codes.email, email)))
+    .get();
 
-      // Code is valid, proceed with authentication
+  if (foundCode) return c.json({ error: "Invalid code" }, 400);
 
-      let token: string = "";
+  // Code is valid, proceed with authentication
 
-      if (!user) {
-        // Create new user
-        let user = await User.create({
-          email,
-          username: email.split("@")[0],
-          display_name: email.split("@")[0],
-          avatar_url: "/guest-avatar.png",
-        });
+  let token: string = "";
 
-        user.save();
+  if (!user) {
+    // Create new user
 
-        token = user.get("token") as string;
-      } else {
-        token = user.get("token") as string;
-      }
+    let user = await db
+      .insert(users)
+      .values({
+        email,
+        username: email.split("@")[0],
+        displayName: email.split("@")[0],
+        avatarUrl: "/guest-avatar.png",
+      })
+      .returning()
+      .get();
 
-      await foundCode.destroy();
+    token = user.token;
+  } else {
+    token = user.token;
+  }
 
-      return c.json({ message: "Authentication successful", token });
-    },
-  );
+  await db
+    .delete(codes)
+    .where(and(eq(codes.code, code), eq(codes.email, email)));
+
+  return c.json({ message: "Authentication successful", token });
 });
 
 export default auth;

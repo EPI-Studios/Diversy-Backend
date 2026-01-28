@@ -1,24 +1,36 @@
 import { Hono } from "hono";
-import User from "../../models/User";
-
+import { users as usersSchema } from "../../drizzle/schema";
+import db from "../../utils/db";
+import { eq } from "drizzle-orm";
 const users = new Hono();
 
 users.get("/:id", async (c) => {
   let id = c.req.param("id"); // username or id
-  let user: User | null = null;
+  let user: typeof usersSchema.$inferSelect | undefined = undefined;
 
-  user = await User.findOne({ where: { id } });
+  user = await db
+    .select()
+    .from(usersSchema)
+    .where(eq(usersSchema.id, Number(id)))
+    .limit(1)
+    .get();
 
-  if (!user) user = await User.findOne({ where: { username: id } });
+  if (!user)
+    user = await db
+      .select()
+      .from(usersSchema)
+      .where(eq(usersSchema.username, id))
+      .limit(1)
+      .get();
   if (!user) return c.json({ error: "User not found" }, 404);
 
   let parsedUser = {
-    id: user.get("id"),
-    username: user.get("username"),
-    display_name: user.get("display_name"),
-    avatar_url: user.get("avatar_url"),
-    banner_url: user.get("banner_url"),
-    custom_css: user.get("custom_css"),
+    id: user.id,
+    username: user.username,
+    display_name: user.displayName,
+    avatar_url: user.avatarUrl,
+    banner_url: user.bannerUrl,
+    custom_css: user.customCss,
   };
 
   return c.json(parsedUser);

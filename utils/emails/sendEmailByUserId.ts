@@ -1,16 +1,17 @@
+import { eq } from "drizzle-orm";
 import { mailtrap, sender } from ".";
-import User from "../../models/User";
+import { users } from "../../drizzle/schema";
+import db from "../db";
 
 export default async function sendEmailByUserId(
   userId: number,
   subject: string,
   text: string,
 ) {
-  let u = await User.findByPk(userId);
+  let u = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  if (!u.length) return false;
 
-  if (!u) return false;
-
-  let email = u.get("email") as string;
+  let email = u[0].email as string;
 
   mailtrap.send({
     from: sender,
