@@ -1,5 +1,7 @@
 import { createMiddleware } from "hono/factory";
-import User from "../models/User";
+import db from "../utils/db";
+import { eq } from "drizzle-orm";
+import { users } from "../drizzle/schema";
 
 export default createMiddleware(async (c, next) => {
   const authHeader = c.req.header("Authorization");
@@ -12,7 +14,12 @@ export default createMiddleware(async (c, next) => {
     return c.json({ error: "Unauthorized" }, 401);
   }
 
-  const user = await User.findOne({ where: { token } });
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.token, token))
+    .get();
+
   if (!user) {
     return c.json({ error: "Unauthorized" }, 401);
   }
