@@ -19,7 +19,7 @@ subdomains.post("/request", authentificated, async (c) => {
     .where(eq(sb.name, name))
     .get();
   if (existingSubdomain) {
-    return c.json({ error: "Subdomain already requested or taken" }, 400);
+    return c.json({ message: "Subdomain already requested or taken" }, 400);
   }
 
   const subdomain = await db.insert(sb).values({
@@ -45,7 +45,7 @@ subdomains.post("/validate/:id", admin_auth, async (c) => {
     .get();
 
   if (!subdomain) {
-    return c.json({ error: "Subdomain not found" }, 404);
+    return c.json({ message: "Subdomain not found" }, 404);
   }
 
   await db
@@ -61,7 +61,7 @@ subdomains.post("/validate/:id", admin_auth, async (c) => {
     .get();
 
   if (!user) {
-    return c.json({ error: "Initiator user not found" }, 404);
+    return c.json({ message: "Initiator user not found" }, 404);
   }
 
   await sendEmailByUserId(
@@ -94,7 +94,7 @@ subdomains.post("/reject/:id", admin_auth, async (c) => {
     .get();
 
   if (!subdomain) {
-    return c.json({ error: "Subdomain not found" }, 404);
+    return c.json({ message: "Subdomain not found" }, 404);
   }
 
   const initiatorId = subdomain.initiatorId;
@@ -105,7 +105,7 @@ subdomains.post("/reject/:id", admin_auth, async (c) => {
     .get();
 
   if (!user) {
-    return c.json({ error: "Initiator user not found" }, 404);
+    return c.json({ message: "Initiator user not found" }, 404);
   }
 
   await sendEmailByUserId(

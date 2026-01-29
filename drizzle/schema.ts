@@ -1,4 +1,9 @@
-import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
+import {
+  sqliteTable,
+  integer,
+  text,
+  foreignKey,
+} from "drizzle-orm/sqlite-core";
 import createCode from "../utils/code";
 import createToken from "../utils/token";
 
@@ -22,6 +27,9 @@ export const users = sqliteTable("Users", {
     .notNull()
     .$defaultFn(() => Date.now()),
   admin: integer().default(0),
+  disabled: integer().default(0),
+  deleted: integer().default(0),
+  deletedAt: integer("deleted_at"),
 });
 
 export const codes = sqliteTable("Codes", {
@@ -55,6 +63,25 @@ export const communities = sqliteTable("Communities", {
     .$defaultFn(() => Date.now()),
 });
 
+export const communityForumPosts = sqliteTable("CommunityForumPosts", {
+  id: integer().primaryKey({ autoIncrement: true }),
+  communityId: integer("community_id")
+    .notNull()
+    .references(() => communities.id),
+  authorId: integer("author_id")
+    .notNull()
+    .references(() => users.id),
+  title: text({ length: 255 }), // Optional title
+  content: text({ length: 255 }).notNull(),
+  thumbnailUrl: text("thumbnail_url", { length: 255 }), // Optional thumbnail
+  createdAt: integer("created_at")
+    .notNull()
+    .$defaultFn(() => Date.now()),
+  updatedAt: integer("updated_at")
+    .notNull()
+    .$defaultFn(() => Date.now()),
+});
+
 export const privateMessages = sqliteTable("PrivateMessages", {
   id: integer().primaryKey({ autoIncrement: true }),
   senderId: integer("sender_id").references(() => users.id),
@@ -66,7 +93,50 @@ export const privateMessages = sqliteTable("PrivateMessages", {
   updatedAt: integer("updated_at")
     .notNull()
     .$defaultFn(() => Date.now()),
+  deleted: integer().default(0),
+  deletedAt: integer("deleted_at"),
 });
+
+export const communityWikis = sqliteTable("CommunityWikis", {
+  id: integer().primaryKey({ autoIncrement: true }),
+  communityId: integer("community_id")
+    .notNull()
+    .references(() => communities.id),
+  name: text({ length: 255 }).notNull(),
+  main_content: text("main_content").notNull(),
+  createdAt: integer("created_at")
+    .notNull()
+    .$defaultFn(() => Date.now()),
+  updatedAt: integer("updated_at")
+    .notNull()
+    .$defaultFn(() => Date.now()),
+});
+
+export const communityWikiPages = sqliteTable(
+  "CommunityWikiPages",
+  {
+    id: integer().primaryKey({ autoIncrement: true }),
+    communityId: integer("community_id")
+      .notNull()
+      .references(() => communities.id),
+    title: text({ length: 255 }).notNull(),
+    content: text().notNull(),
+    createdAt: integer("created_at")
+      .notNull()
+      .$defaultFn(() => Date.now()),
+    updatedAt: integer("updated_at")
+      .notNull()
+      .$defaultFn(() => Date.now()),
+    parentId: integer("parent_id"),
+  },
+  (self) => [
+    foreignKey({
+      columns: [self.parentId],
+      foreignColumns: [self.id],
+      name: "community_wiki_page_parent_fkey",
+    }),
+  ],
+);
 
 export const subdomains = sqliteTable("Subdomains", {
   id: integer().primaryKey({ autoIncrement: true }),

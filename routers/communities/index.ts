@@ -43,7 +43,7 @@ communities.get("/:communityId", async (c) => {
     .where(eq(cm.id, Number(communityId)))
     .get();
   if (!community) {
-    return c.json({ error: "Community not found" }, 404);
+    return c.json({ message: "Community not found" }, 404);
   }
 
   return c.json(community);

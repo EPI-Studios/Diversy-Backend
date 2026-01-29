@@ -6,12 +6,12 @@ import { eq } from "drizzle-orm";
 export default createMiddleware(async (c, next) => {
   const authHeader = c.req.header("Authorization");
   if (!authHeader) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ message: "Unauthorized" }, 401);
   }
 
   let token = authHeader.split(" ")[1];
   if (!token) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ message: "Unauthorized" }, 401);
   }
 
   const user = await db
@@ -20,11 +20,11 @@ export default createMiddleware(async (c, next) => {
     .where(eq(users.token, token))
     .get();
   if (!user) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ message: "Unauthorized" }, 401);
   }
 
   if (!user.admin) {
-    return c.json({ error: "Forbidden" }, 403);
+    return c.json({ message: "Forbidden" }, 403);
   }
 
   c.set("user", user);

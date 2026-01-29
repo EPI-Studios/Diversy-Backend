@@ -6,12 +6,12 @@ import { users } from "../drizzle/schema";
 export default createMiddleware(async (c, next) => {
   const authHeader = c.req.header("Authorization");
   if (!authHeader) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ message: "Unauthorized" }, 401);
   }
 
   let token = authHeader.split(" ")[1];
   if (!token) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ message: "Unauthorized" }, 401);
   }
 
   const user = await db
@@ -21,7 +21,7 @@ export default createMiddleware(async (c, next) => {
     .get();
 
   if (!user) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ message: "Unauthorized" }, 401);
   }
 
   c.set("user", user);

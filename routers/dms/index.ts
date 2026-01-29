@@ -35,7 +35,7 @@ dms.get("/:otherUserId", async (c) => {
     .where(eq(users.id, Number(otherUserId)))
     .get();
   if (!otherUser) {
-    return c.json({ error: "User not found" }, 404);
+    return c.json({ message: "User not found" }, 404);
   }
 
   const messages = await db
@@ -64,11 +64,11 @@ dms.put("/:messageId", async (c) => {
     .where(eq(privateMessages.id, Number(messageId)))
     .get();
   if (!message) {
-    return c.json({ error: "Message not found" }, 404);
+    return c.json({ message: "Message not found" }, 404);
   }
 
   if (message.senderId !== user.id) {
-    return c.json({ error: "Forbidden" }, 403);
+    return c.json({ message: "Forbidden" }, 403);
   }
 
   db.update(privateMessages)
@@ -89,7 +89,7 @@ dms.post("/:receiverId", async (c) => {
     .where(eq(users.id, Number(receiverId)))
     .get();
   if (!receiver) {
-    return c.json({ error: "Receiver not found" }, 404);
+    return c.json({ message: "Receiver not found" }, 404);
   }
 
   const message = await db.insert(privateMessages).values({
@@ -99,6 +99,31 @@ dms.post("/:receiverId", async (c) => {
   });
 
   return c.json(message, 201);
+});
+
+dms.delete("/:messageId", async (c) => {
+  const user = c.get("user");
+  const { messageId } = c.req.param();
+
+  const message = await db
+    .select()
+    .from(privateMessages)
+    .where(eq(privateMessages.id, Number(messageId)))
+    .get();
+  if (!message) {
+    return c.json({ message: "Message not found" }, 404);
+  }
+
+  if (message.senderId !== user.id && message.receiverId !== user.id) {
+    return c.json({ message: "Forbidden" }, 403);
+  }
+
+  await db
+    .update(privateMessages)
+    .set({ deleted: 1, deletedAt: Date.now() })
+    .where(eq(privateMessages.id, Number(messageId)));
+
+  return c.json({ success: true, message: "Message deleted successfully" });
 });
 
 export default dms;

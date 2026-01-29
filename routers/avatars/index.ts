@@ -19,13 +19,13 @@ avatars.get("/:userId", async (c) => {
 
   try {
     const base64url = await getFile(fileKey, "avatar");
-    if (!base64url) return c.json({ error: "Avatar not found" }, 404);
+    if (!base64url) return c.json({ message: "Avatar not found" }, 404);
 
     return c.body(base64url, 200, {
       "Content-Type": "image/png",
     });
   } catch (error) {
-    return c.json({ error: "Avatar not found" }, 404);
+    return c.json({ message: "Avatar not found" }, 404);
   }
 });
 
@@ -38,7 +38,7 @@ avatars.post("/", authentificated, async (c) => {
   const avatar = formData.get("avatar") as string;
 
   if (!avatar) {
-    return c.json({ error: "No avatar provided" }, 400);
+    return c.json({ message: "No avatar provided" }, 400);
   }
 
   try {
@@ -50,7 +50,7 @@ avatars.post("/", authentificated, async (c) => {
 
     return c.json({ message: "Avatar uploaded successfully" });
   } catch (error) {
-    return c.json({ error: "Failed to upload avatar" }, 500);
+    return c.json({ message: "Failed to upload avatar" }, 500);
   }
 });
 
