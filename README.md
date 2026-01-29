@@ -16,6 +16,6 @@
 - TypeScript
 - Hono (API REST)
 - WebSocket (temps réel)
-- Sequelize (ORM)
+- Drizzle ORM
 - SQLite (développement)
 - MySQL (production)
