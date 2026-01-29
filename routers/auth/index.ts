@@ -14,13 +14,13 @@ auth.post("/me", async (c) => {
     .select()
     .from(users)
     .where(eq(users.token, token))
-    .limit(1);
+    .get();
 
-  if (!user.length) {
+  if (!user) {
     return c.json({ error: "Invalid token" }, 401);
   }
 
-  return c.json(user[0]);
+  return c.json(user);
 });
 
 auth.post("/", async (c) => {

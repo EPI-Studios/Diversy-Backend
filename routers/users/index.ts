@@ -12,7 +12,6 @@ users.get("/:id", async (c) => {
     .select()
     .from(usersSchema)
     .where(eq(usersSchema.id, Number(id)))
-    .limit(1)
     .get();
 
   if (!user)
@@ -20,8 +19,8 @@ users.get("/:id", async (c) => {
       .select()
       .from(usersSchema)
       .where(eq(usersSchema.username, id))
-      .limit(1)
       .get();
+
   if (!user) return c.json({ error: "User not found" }, 404);
 
   let parsedUser = {
