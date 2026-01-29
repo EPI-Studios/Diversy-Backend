@@ -1,12 +1,12 @@
-<p align="center">🇫🇷 Vous voulez accéder à la version française ? <a href="./README_fr.md">Cliquez ici.</a></p>
+<p align="center">🇬🇧🏴󠁧󠁢󠁥󠁮󠁧󠁿 Want to read this in English? <a href="./README.md">Click here.</a></p>
 
 <div align="center">
-    <img src="./md_assets/logo.png" alt="Diversy Logo" width="300" />
-    <p>Open-source, privacy-first social platform focused on security, diversity and creativity.
-    </p>
+	<img src="./md_assets/logo.png" alt="Diversy Logo" />
+	<h2>Diversy</h2>
+	<p>Plateforme sociale moderne, open-source, axée sur la sécurité, la diversité et la créativité.</p>
 </div>
 
-<div style="display:flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px;">
+<div style="display:flex">
     <img src="https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white" alt="Bun" />
     <img src="https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
     <img src="https://img.shields.io/badge/hono-%23E36002.svg?style=for-the-badge&logo=hono&logoColor=white" alt="Hono" />
@@ -25,5 +25,5 @@ This repository contains the backend of Diversy. You can find the frontend repos
 
 ## License
 
-This is project is "All Rights Reserved". See [LICENSE](./LICENSE) for more information.
-For any inquiries, please contact me at neko.anima@proton.me
+Ce projet est "Tous droits réservés". Voir le fichier [LICENSE](./LICENSE) pour plus d'informations.
+Pour toute demande, veuillez me contacter à neko.anima@proton.me

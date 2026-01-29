@@ -1,0 +1,33 @@
+LICENSE
+Copyright (c) 2026 Nekoniyah - EPI Studios
+
+1. DEFINITIONS
+"Software" refers to the Diversy project, including all source code, assets, and documentation.
+
+"Owner" refers to the copyright holder specified above.
+
+"Contribution" refers to any code or content submitted to the Owner via Pull Requests, Issues, or other channels.
+
+2. GRANT OF READ-ONLY PERMISSION
+Permission is hereby granted to any person to read, review, and clone the source code of this Software for personal, educational, or auditing purposes.
+
+3. LIMITED PERMISSION TO FORK
+Notwithstanding the restrictions in Section 4, users are permitted to "fork" the Software on GitHub strictly and solely for the purpose of preparing and submitting Pull Requests to the original repository. Any fork maintained for purposes other than contributing to the official project is a violation of this license.
+
+4. PROHIBITIONS AND RESTRICTIONS
+Except as expressly permitted in Section 3, the following actions are strictly prohibited without prior written consent from the Owner:
+
+No Distribution: You may not redistribute, sub-license, host, or publish the Software or modified versions of it as a standalone product or service.
+
+No Commercial Use: You may not use the Software, its code, or its assets for any commercial purpose, including but not limited to selling the software, using it as part of a paid service, or using it to generate advertising revenue.
+
+No Sublicensing: You may not grant any rights to third parties to use or distribute the Software.
+
+5. CONTRIBUTIONS
+By submitting a Pull Request or otherwise contributing to the Software, you agree to grant the Owner a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to incorporate, modify, and distribute your contributions as part of the Software under the terms of this or any future license chosen by the Owner.
+
+6. TERMINATION
+Any use of the Software not in accordance with the terms of this License will terminate your rights under this License automatically.
+
+7. DISCLAIMER OF WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
