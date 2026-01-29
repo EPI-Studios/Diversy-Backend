@@ -5,7 +5,7 @@
 	<p>Plateforme sociale moderne, open-source, axée sur la sécurité, la diversité et la créativité.</p>
 </div>
 
-<div style="display:flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px;">
+<div align="center" style="display:flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px;">
     <img src="https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white" alt="Bun" />
     <img src="https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
     <img src="https://img.shields.io/badge/hono-%23E36002.svg?style=for-the-badge&logo=hono&logoColor=white" alt="Hono" />
