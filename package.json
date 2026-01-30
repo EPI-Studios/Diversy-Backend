@@ -14,5 +14,10 @@
   "devDependencies": {
     "@types/bun": "^1.3.7",
     "drizzle-kit": "^0.31.8"
+  },
+  "scripts": {
+    "db:push": "drizzle-kit push --config ./drizzle.config.ts",
+    "dev": "bun run --watch index.ts",
+    "start": "bun index.ts"
   }
 }

@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import sendEmail from "../../utils/emails/sendEmail";
 import db from "../../utils/db";
 import { codes, users } from "../../drizzle/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, asc } from "drizzle-orm";
 
 const auth = new Hono();
 
@@ -76,7 +76,7 @@ auth.post("/confirm", async (c) => {
     .where(and(eq(codes.code, code), eq(codes.email, email)))
     .get();
 
-  if (foundCode) return c.json({ message: "Invalid code" }, 400);
+  if (!foundCode) return c.json({ message: "Invalid code" }, 400);
 
   // Code is valid, proceed with authentication
 
