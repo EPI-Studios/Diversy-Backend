@@ -26,6 +26,7 @@ export const users = sqliteTable("Users", {
   updatedAt: integer("updated_at")
     .notNull()
     .$defaultFn(() => Date.now()),
+  biography: text("biography", { length: 512 }).default(""),
   admin: integer().default(0),
   disabled: integer().default(0),
   deleted: integer().default(0),

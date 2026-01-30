@@ -8,33 +8,48 @@ const users = new Hono();
 
 users.get("/:id", async (c) => {
   let id = c.req.param("id"); // username or id
-  let user: typeof usersSchema.$inferSelect | undefined = undefined;
+  let user: Partial<typeof usersSchema.$inferSelect> | undefined = undefined;
+
+  const selectData = {
+    id: usersSchema.id,
+    username: usersSchema.username,
+    displayName: usersSchema.displayName,
+    avatarUrl: usersSchema.avatarUrl,
+    bannerUrl: usersSchema.bannerUrl,
+    customCss: usersSchema.customCss,
+    deleted: usersSchema.deleted,
+    createdAt: usersSchema.createdAt,
+    updatedAt: usersSchema.updatedAt,
+    biography: usersSchema.biography,
+  };
 
   user = await db
-    .select()
+    .select(selectData)
     .from(usersSchema)
     .where(eq(usersSchema.id, Number(id)))
     .get();
 
   if (!user)
     user = await db
-      .select()
+      .select(selectData)
       .from(usersSchema)
       .where(eq(usersSchema.username, id))
       .get();
 
   if (!user) return c.json({ message: "User not found" }, 404);
 
-  let parsedUser = {
-    id: user.id,
-    username: user.deleted ? "deleted-user" : user.username,
-    display_name: user.deleted ? "Deleted User" : user.displayName,
-    avatar_url: user.deleted ? "/guest-avatar.png" : user.avatarUrl,
-    banner_url: user.deleted ? null : user.bannerUrl,
-    custom_css: user.deleted ? "" : user.customCss,
-  };
+  if (user.deleted) {
+    user.username = "deleted-user";
+    user.displayName = "Deleted User";
+    user.avatarUrl = "/guest-avatar.png";
+    user.bannerUrl = null;
+    user.customCss = "";
+    user.biography = `*Account deleted since ${new Date(
+      user.updatedAt || 0,
+    ).toDateString()}*`;
+  }
 
-  return c.json(parsedUser);
+  return c.json(user);
 });
 
 users.put("/", authentificated, async (c) => {
