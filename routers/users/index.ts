@@ -55,16 +55,20 @@ users.get("/:id", async (c) => {
 users.put("/", authentificated, async (c) => {
   const user = c.get("user" as never) as typeof usersSchema.$inferSelect;
 
-  const { displayName, avatarUrl, bannerUrl, customCss } =
-    await c.req.parseBody<{ [key: string]: string }>();
+  const { username, avatarUrl, bannerUrl, customCss, biography } =
+    await c.req.parseBody<{
+      [key: string]: string;
+    }>();
 
   await db
     .update(usersSchema)
     .set({
-      displayName: displayName ?? user.displayName,
+      displayName: username ?? user.displayName,
+      username: username ?? user.username,
       avatarUrl: avatarUrl ?? user.avatarUrl,
       bannerUrl: bannerUrl ?? user.bannerUrl,
       customCss: customCss ?? user.customCss,
+      biography: biography ?? user.biography,
       updatedAt: Date.now(),
     })
     .where(eq(usersSchema.id, user.id));
