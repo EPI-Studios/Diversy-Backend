@@ -28,31 +28,6 @@ adminRouter.get("/users", admin_auth, async (c) => {
   return c.json(parsedUsers);
 });
 
-adminRouter.post("/users/:id/disable", admin_auth, async (c) => {
-  let id = c.req.param("id"); // username or id
-  let user = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, Number(id)))
-    .get();
-
-  if (!user) return c.json({ message: "User not found" }, 404);
-
-  await db.update(users).set({ disabled: 1 }).where(eq(users.id, user.id));
-
-  await sendEmailByUserId(
-    user.id,
-    `Account Disabled`,
-    `
-      Hello ${user.displayName},
-
-      We wanted to inform you that your account on Diversy has been disabled by an administrator. If you believe this was done in error or have any questions, please contact our support team.
-
-      Best regards,
-      The Diversy Team`,
-  );
-});
-
 adminRouter.delete("/users/:id", admin_auth, async (c) => {
   let id = c.req.param("id"); // id
 
